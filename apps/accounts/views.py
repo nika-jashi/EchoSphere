@@ -43,7 +43,7 @@ class AccountAuthenticationView(View):
 
             if user:
                 login(request, user)
-                return redirect('')
+                return redirect('accounts:main')
 
         else:
             return render(request, self.template_name, {'form': form})
@@ -55,4 +55,12 @@ class AccountLogoutView(View):
     def get(self, request):
         if request.user.is_authenticated:
             logout(request)
+            return render(request, self.template_name)
+
+
+class MainPage(View):
+    template_name = 'feed/news_feed.html'
+
+    def get(self, request):
+        if request.user.is_authenticated:
             return render(request, self.template_name)

@@ -139,3 +139,37 @@ header {
     font-weight: bold;
     display: block;
 }
+
+.main-content {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.main-content h1 {
+    color: #363636;
+}
+
+.feed {
+    margin-top: 20px;
+}
+
+.post {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.post-content {
+    margin-bottom: 8px;
+}
+
+.post-info {
+    color: #888;
+    font-size: 12px;
+}

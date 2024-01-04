@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'main.html' %}
 
-</body>
-</html>
+{% block content %}
+    <section class="main-content">
+        <h1>Logged Out</h1>
+        <p>You have been successfully logged out of Echo Sphere.</p>
+        <p>Thank you for using our platform!</p>
+        
+            <h2>Log In Again?</h2>
+            <p class="link"><a href="{% url 'accounts:login' %}">Log In</a></p>
+    </section>
+{% endblock %}
