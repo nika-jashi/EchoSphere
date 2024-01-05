@@ -23,6 +23,7 @@ ALLOWED_HOSTS = []
 
 PROJECT_APPS = [
     'apps.accounts.apps.AccountsConfig',
+    'apps.posts.apps.PostsConfig',
 ]
 
 THIRD_PARTY_APPS = [
