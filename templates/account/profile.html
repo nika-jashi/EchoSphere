@@ -1,0 +1,37 @@
+{% extends 'main.html' %}
+{% block title %}User Profile - Echo Sphere{% endblock %}
+
+{% block content %}
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-picture-container">
+                    {% if user.profile.profile_picture %}
+                        <img class="profile-picture" src="{{ user.profile.profile_picture.url }}"
+                             alt="{{ user.username }}'s Profile Picture">
+                    {% else %}
+                        <div class="default-profile-picture"></div>
+                    {% endif %}
+                </div>
+                <div class="profile-info">
+                    <h1>{{ user.username }}</h1>
+                    <p class="user-email">{{ user.email }}</p>
+                    <p class="user-bio"><strong>Bio: </strong>{{ user.profile.bio }}</p>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail">
+                    <strong>Full Name:</strong>
+                    <span>{{ user.profile.first_name }} {{ user.profile.last_name }}</span>
+                </div>
+                <div class="detail">
+                    <strong>Date of Birth:</strong>
+                    <span>{{ user.profile.date_of_birth }}</span>
+                </div>
+                <div class="detail">
+                    <strong>Gender:</strong>
+                    <span>{{ user.profile.get_gender_display }}</span>
+                </div>
+            </div>
+        </div>
+{% endblock %}

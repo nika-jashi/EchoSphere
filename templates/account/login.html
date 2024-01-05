@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block title %}Registration Form - Echo Sphere{% endblock %}
+{% block content %}
+    <div class="form-container">
+        <h2>Registration Form</h2>
+        <form method="POST" action={% url 'accounts:login' %}>
+            {% csrf_token %}
+            <label for="email">Email Or Username:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                {{ form.email.errors }}
+            {% endif %}
+            <label for="password">Password:</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                {{ form.password.errors }}
+            {% endif %}
+            <button type="submit">Log In</button>
+        </form>
+        <a href="{% url 'accounts:registration' %}" class="link">Do Not Have An Account? Register Here</a>
+    </div>
+{% endblock %}
