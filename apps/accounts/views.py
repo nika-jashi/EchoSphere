@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 
 from apps.accounts.forms import AccountRegistrationForm, AccountAuthenticationForm, ProfileForm
+from apps.utils.db_queries import get_my_posts
 
 
 class AccountRegistrationView(View):
@@ -43,7 +44,7 @@ class AccountAuthenticationView(View):
 
             if user:
                 login(request, user)
-                return redirect('accounts:main')
+                return redirect('news-feed')
 
         else:
             return render(request, self.template_name, {'form': form})
@@ -63,7 +64,8 @@ class AccountProfileView(View):
 
     def get(self, request):
         if request.user.is_authenticated:
-            return render(request, self.template_name)
+            my_posts = get_my_posts(request.user)
+            return render(request, self.template_name,{'my_posts': my_posts})
 
 
 class AccountProfileEditView(View):
