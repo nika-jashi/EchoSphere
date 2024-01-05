@@ -3,7 +3,7 @@
 
 {% block title %}Registration Form - Echo Sphere{% endblock %}
 {% block content %}
-    <div class="registration-container">
+    <div class="form-container">
         <h2>Registration Form</h2>
         <form method="POST" action={% url 'accounts:login' %}>
             {% csrf_token %}

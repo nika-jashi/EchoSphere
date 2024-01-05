@@ -1,0 +1,75 @@
+{% extends 'main.html' %}
+{% block title %}User Profile - Echo Sphere{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
+        <form method="post" action="{% url 'accounts:profile-update' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="profile-header">
+                <div class="profile-picture-container">
+                    {% if user.profile.profile_picture %}
+                        <img class="profile-picture" src="{{ user.profile.profile_picture.url }}"
+                             alt="{{ user.username }}'s Profile Picture">
+                    {% else %}
+                        <div class="default-profile-picture"></div>
+                    {% endif %}
+                </div>
+                <div class="profile-info">
+                    <h1>{{ user.username }}</h1>
+                    <p class="user-email">{{ user.email }}</p>
+                    <div>
+                        <strong>Upload Picture: </strong>
+                        {{ profile_form.profile_picture }}
+                        {% if profile_form.profile_picture.errors %}
+                            {{ profile_form.profile_picture.errors }}
+                        {% endif %}
+                    </div>
+                    <p class="user-bio"><strong>Bio: </strong>{{ profile_form.bio }}
+                        {% if profile_form.bio.errors %}
+                            {{ profile_form.bio.errors }}
+                        {% endif %}
+                    </p>
+
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail">
+                    <strong>First Name:</strong>
+                    <span>
+                        {{ profile_form.first_name }}
+                        {% if profile_form.first_name.errors %}
+                            {{ profile_form.first_name.errors }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="detail">
+                    <strong>Last Name:</strong>
+                    <span>
+                        {{ profile_form.last_name }}
+                        {% if profile_form.last_name.errors %}
+                            {{ profile_form.last_name.errors }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="detail">
+                    <strong>Date of Birth:</strong>
+                    <span>{{ profile_form.date_of_birth }}
+                        {% if profile_form.date_of_birth.errors %}
+                            {{ profile_form.date_of_birth.errors }}
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="detail">
+                    <strong>Gender:</strong>
+                    <span>{{ profile_form.gender }}
+                        {% if profile_form.gender.errors %}
+                            {{ profile_form.gender.errors }}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+{% endblock %}

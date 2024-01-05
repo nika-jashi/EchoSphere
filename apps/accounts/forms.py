@@ -1,5 +1,5 @@
 from django import forms
-from apps.accounts.models import CustomAccount
+from apps.accounts.models import CustomAccount, Profile
 
 
 class AccountRegistrationForm(forms.ModelForm):
@@ -60,3 +60,16 @@ class AccountAuthenticationForm(forms.ModelForm):
             existing_user = CustomAccount.objects.filter(email=credential).exists()
             if not existing_user:
                 self.add_error('email', "No Active User Found With This Email")
+
+
+class ProfileForm(forms.ModelForm):
+    first_name = forms.CharField()
+    last_name = forms.CharField()
+    bio = forms.CharField(widget=forms.Textarea)
+    gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')])
+    date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    profile_picture = forms.ImageField(required=False)
+
+    class Meta:
+        model = Profile
+        fields = ('first_name', 'last_name', 'bio', 'profile_picture', 'gender', 'date_of_birth')

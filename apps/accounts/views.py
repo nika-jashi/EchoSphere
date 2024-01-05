@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views import View
 
-from apps.accounts.forms import AccountRegistrationForm, AccountAuthenticationForm
+from apps.accounts.forms import AccountRegistrationForm, AccountAuthenticationForm, ProfileForm
 
 
 class AccountRegistrationView(View):
@@ -65,3 +65,21 @@ class AccountProfileView(View):
         if request.user.is_authenticated:
             return render(request, self.template_name)
 
+
+class AccountProfileEditView(View):
+    template_name = 'account/update_profile.html'
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            profile_form = ProfileForm(instance=request.user.profile)
+            return render(request, self.template_name, {'profile_form': profile_form})
+
+    def post(self, request):
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if profile_form.is_valid():
+            profile_form.save()
+            return redirect('accounts:profile')
+        else:
+            print(profile_form.errors)
+        return render(request, self.template_name, {'profile_form': profile_form})
