@@ -58,9 +58,10 @@ class AccountLogoutView(View):
             return render(request, self.template_name)
 
 
-class MainPage(View):
-    template_name = 'feed/news_feed.html'
+class AccountProfileView(View):
+    template_name = 'account/profile.html'
 
     def get(self, request):
         if request.user.is_authenticated:
             return render(request, self.template_name)
+

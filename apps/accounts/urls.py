@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required as l
 from django.urls import path
-from apps.accounts.views import AccountRegistrationView, AccountAuthenticationView, AccountLogoutView,MainPage
+from apps.accounts.views import (AccountRegistrationView,
+                                 AccountAuthenticationView,
+                                 AccountLogoutView,
+                                 AccountProfileView)
 
 app_name = "accounts"
 
@@ -8,5 +11,5 @@ urlpatterns = [
     path('registration/', AccountRegistrationView.as_view(), name='registration'),
     path('login/', AccountAuthenticationView.as_view(), name='login'),
     path('logout/', l(AccountLogoutView.as_view(), redirect_field_name='login'), name='logout'),
-    path('main/', l(MainPage.as_view(), redirect_field_name='login'), name='main'),
+    path('profile/', l(AccountProfileView.as_view(), redirect_field_name='login'), name='main'),
 ]
