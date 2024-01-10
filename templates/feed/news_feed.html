@@ -14,6 +14,26 @@
                     {% endif %}
                     <p><small class="post-info">Posted by {{ post.user.username }}
                         on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
+
+                    <!-- Like button and count -->
+                    <div class="like-section">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
+                                {% if user in post.likes.all %}
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-primary like-btn">Liked</button>
+                                {% else %}
+                                    </form>
+                                    <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
+                                    </form>
+                                {% endif %}
+                        {% else %}
+                            <!-- Handle case when the user is not authenticated -->
+                        {% endif %}
+                        <span class="likes-count">{{ post.likes.count }} Likes</span>
+                    </div>
                 </div>
             </div>
         </section>
