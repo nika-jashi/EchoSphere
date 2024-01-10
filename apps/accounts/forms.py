@@ -44,7 +44,7 @@ class AccountRegistrationForm(forms.ModelForm):
 class AccountAuthenticationForm(forms.ModelForm):
     """ A form for existing users. Includes all the required
         fields for user to authenticate. """
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Email Or Username'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))
 
     password = forms.CharField(label='Password',
                                widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
@@ -65,7 +65,7 @@ class AccountAuthenticationForm(forms.ModelForm):
 class ProfileForm(forms.ModelForm):
     first_name = forms.CharField()
     last_name = forms.CharField()
-    bio = forms.CharField(widget=forms.Textarea)
+    bio = forms.CharField(widget=forms.Textarea, required=False)
     gender = forms.ChoiceField(choices=[('M', 'Male'), ('F', 'Female'), ('O', 'Other')])
     date_of_birth = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
     profile_picture = forms.ImageField(required=False)

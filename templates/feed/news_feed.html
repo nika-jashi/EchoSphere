@@ -1,24 +1,41 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <section class="main-content">
-        <h1>Welcome to Echo Sphere, [Username]!</h1>
-        
-        <!-- Feed Section -->
-        <div class="feed">
-            <!-- Post 1 -->
-            <div class="post">
-                <p class="post-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eget tortor nisl.</p>
-                <small class="post-info">Posted by User1 on January 4, 2024</small>
-            </div>
+    <h1 class="main-title">Welcome To Echo Sphere</h1>
+    {% for post in news_feed_posts %}
+        <section class="main-content">
+            <!-- Feed Section -->
+            <div class="feed">
+                <!-- Post Card -->
+                <div class="post-card">
+                    <p class="post-content">{{ post.content }}</p>
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
+                    {% endif %}
+                    <p><small class="post-info">Posted by {{ post.user.username }}
+                        on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
 
-            <!-- Post 2 -->
-            <div class="post">
-                <p class="post-content">Integer euismod libero eu enim vehicula, non fringilla odio varius.</p>
-                <small class="post-info">Posted by User2 on January 3, 2024</small>
+                    <!-- Like button and count -->
+                    <div class="like-section">
+                        {% if user.is_authenticated %}
+                            <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
+                                {% if user in post.likes.all %}
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-primary like-btn">Liked</button>
+                                {% else %}
+                                    </form>
+                                    <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
+                                    </form>
+                                {% endif %}
+                        {% else %}
+                            <!-- Handle case when the user is not authenticated -->
+                        {% endif %}
+                        <span class="likes-count">{{ post.likes.count }} Likes</span>
+                    </div>
+                </div>
             </div>
-
-            <!-- Add more posts as needed -->
-        </div>
-    </section>
+        </section>
+    {% endfor %}
 {% endblock %}

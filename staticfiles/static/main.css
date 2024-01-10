@@ -13,6 +13,14 @@ header {
 }
 
 .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #363636;
+    color: #fff;
+    padding: 15px 0;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -90,7 +98,7 @@ header {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 400px;
-    margin: 20px auto;
+    margin: 60px auto;
 }
 
 .form-container h2 {
@@ -105,6 +113,19 @@ header {
     display: block;
     margin-bottom: 8px;
     color: #555;
+}
+
+.main-title {
+    background-color: #eab00b;
+    color: #333;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.main-title h1 {
+    font-size: 2em;
+    margin: 0;
 }
 
 input {
@@ -172,31 +193,30 @@ select:hover, select:focus {
 
 .main-content {
     max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    color: #333;
-}
-
-.main-content h1 {
-    color: #363636;
+    margin: 0 auto;
 }
 
 .feed {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-.post {
-    background-color: #f9f9f9;
+.post-card {
+    border: 1px solid #ddd;
     border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 12px;
 }
 
 .post-content {
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .post-info {
@@ -240,7 +260,7 @@ select:hover, select:focus {
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     max-width: 800px;
-    margin: 20px auto;
+    margin: 60px auto;
     position: relative; /* Add this line */
 }
 
@@ -292,4 +312,81 @@ select:hover, select:focus {
 .user-email {
     color: #888;
     font-size: 14px;
+}
+
+.redirect-button {
+    display: block; /* Display as block element to fit within the container */
+    margin-top: 10px; /* Add some top margin for spacing */
+    padding: 10px 20px;
+    background-color: #333333; /* Dark Grey */
+    color: #FFFFFF; /* White */
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+    text-align: center;
+}
+
+.redirect-button:hover {
+    background-color: #FFA500; /* Orange */
+
+}
+
+.like-section {
+    display: flex;
+    align-items: center;
+}
+
+.like-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.like-btn:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+.like-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background-color: #FFA500;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background-color: #333333;
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    border: 1px solid #333333;
+    color: #333333;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.likes-count {
+    color: #555;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+.likes-count::before {
+    content: '\2022'; /* Unicode character for a small bullet */
+    color: #888;
+    margin-right: 5px;
 }
