@@ -18,17 +18,17 @@
                     <!-- Like button and count -->
                     <div class="like-section">
                         {% if user.is_authenticated %}
-                            <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
-                                {% if user in post.likes.all %}
+                            {% if user in post.likes.all %}
+                                <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-sm btn-primary like-btn">Liked</button>
-                                {% else %}
-                                    </form>
-                                    <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
-                                    </form>
-                                {% endif %}
+                                </form>
+                            {% else %}
+                                <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
+                                </form>
+                            {% endif %}
                         {% else %}
                             <!-- Handle case when the user is not authenticated -->
                         {% endif %}
@@ -38,4 +38,35 @@
             </div>
         </section>
     {% endfor %}
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Your template content -->
+
+    <script>
+        $(document).ready(function () {
+            // Add an event listener to all like buttons
+            $(".like-form").on("submit", function (event) {
+                event.preventDefault();  // Prevent the default form submission
+
+                var form = $(this);
+                var url = form.attr("action");
+
+                // Make an AJAX request to the specified URL
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),  // Serialize the form data
+                    success: function () {
+                        // Reload the current page upon success
+                        location.reload();
+                    },
+                    error: function () {
+                        console.log("Error handling like/unlike");
+                    },
+                });
+            });
+        });
+    </script>
 {% endblock %}
