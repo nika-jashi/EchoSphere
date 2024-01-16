@@ -1,0 +1,96 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    {{ post.title }} - Echo Sphere
+{% endblock %}
+
+{% block content %}
+    <div class="main-content center-content">
+        <div class="post-details">
+            <div class="post-card">
+                <a href="{% url 'news-feed' %}">
+                    <button class="close-btn">&#10006;</button>
+                </a>
+                {% if user.is_authenticated and user == post.user %}
+                    <div class="dropdown">
+                        <button class="dropbtn">• • •</button>
+                        <div class="dropdown-content">
+                            {% comment %}<a href="{% url '' %}">
+                                <button class="action-btn">Edit</button>
+                            </a>{% endcomment %}
+                            <form action="{% url 'posts:delete' post.id %}" method="GET">
+                                <button type="submit" class="action-btn">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="post-info">
+                    <span class="detail">{{ post.created_at }}</span>
+                </div>
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
+                {% endif %}
+                <div class="post-content">
+                    <p>{{ post.content }}</p>
+                </div>
+                <div class="like-section">
+                    {% if user in post.likes.all %}
+                        <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-primary like-btn">Liked</button>
+                        </form>
+                    {% else %}
+                        <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
+                        </form>
+                    {% endif %}
+                    <span class="likes-count">{{ post.likes.count }} Likes</span>
+                </div>
+            </div>
+            <div class="profile-info">
+                <div class="user-bio">{{ post.user.profile.bio }}</div>
+                <div class="profile-details">
+                    <div class="detail">
+                        <strong>Author:</strong>
+                        <span>{{ post.user.username }}</span>
+                    </div>
+                    <div class="detail">
+                        <strong>Email:</strong>
+                        <span>{{ post.user.email }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Your template content -->
+
+    <script>
+        $(document).ready(function () {
+            // Add an event listener to all like buttons
+            $(".like-form").on("submit", function (event) {
+                event.preventDefault();  // Prevent the default form submission
+                var form = $(this);
+                var url = form.attr("action");
+                // Make an AJAX request to the specified URL
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: form.serialize(),  // Serialize the form data
+                    success: function () {
+                        // Reload the current page upon success
+                        location.reload();
+                    },
+                    error: function () {
+                        console.log("Error handling like/unlike");
+                    },
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
