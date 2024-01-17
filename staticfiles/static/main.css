@@ -216,7 +216,9 @@ select:hover, select:focus {
 }
 
 .post-content {
-    margin-bottom: 12px;
+    margin-bottom: 22px;
+    white-space: pre-line;
+    word-wrap: break-word;
 }
 
 .post-info {
@@ -462,7 +464,50 @@ select:hover, select:focus {
     color: #333;
 }
 
+.post-card-detail {
+    max-width: 800px; /* Adjust as needed */
+    position: relative;
+}
+.post-card-detail {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-card img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
 .post-card {
     max-width: 800px; /* Adjust as needed */
     position: relative;
+    transition: transform 0.3s ease-in-out;
+}
+
+.post-card:hover {
+    transform: scale(1.02); /* Enlarge on hover */
+    cursor: pointer;
+}
+
+/* Add the following CSS to make the entire card clickable */
+.post-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-card a:hover {
+    color: inherit;
+}
+
+/* Adjust the styles for details link if needed */
+.post-card .details-link {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    font-weight: bold;
 }

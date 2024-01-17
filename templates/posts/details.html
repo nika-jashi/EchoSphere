@@ -7,7 +7,7 @@
 {% block content %}
     <div class="main-content center-content">
         <div class="post-details">
-            <div class="post-card">
+            <div class="post-card-detail">
                 <a href="{% url 'news-feed' %}">
                     <button class="close-btn">&#10006;</button>
                 </a>
@@ -15,9 +15,9 @@
                     <div class="dropdown">
                         <button class="dropbtn">• • •</button>
                         <div class="dropdown-content">
-                            {% comment %}<a href="{% url '' %}">
-                                <button class="action-btn">Edit</button>
-                            </a>{% endcomment %}
+                            <form action="{% url 'posts:update' post.id %}" method="GET">
+                                <button type="submit" class="action-btn">Update</button>
+                            </form>
                             <form action="{% url 'posts:delete' post.id %}" method="GET">
                                 <button type="submit" class="action-btn">Delete</button>
                             </form>
@@ -92,5 +92,4 @@
             });
         });
     </script>
-
 {% endblock %}

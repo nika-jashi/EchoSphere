@@ -44,12 +44,14 @@
             <div class="feed">
                 <!-- Post Card -->
                 <div class="post-card">
+                <a href="{% url 'posts:detail' post.id %}" class="details-link">
                     <p class="post-content">{{ post.content }}</p>
                     {% if post.image %}
                         <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
                     {% endif %}
                     <p><small class="post-info">Posted by {{ post.user.username }}
                         on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
+                </a>
                 </div>
             </div>
         </section>
