@@ -1,5 +1,7 @@
 from django import forms
 from apps.accounts.models import CustomAccount, Profile
+from apps.utils.password_validations import (contains_digits, contains_lowercase, contains_uppercase,
+                                             does_not_contains_symbols, does_not_contains_whitespace)
 
 
 class AccountRegistrationForm(forms.ModelForm):
@@ -10,11 +12,16 @@ class AccountRegistrationForm(forms.ModelForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}))
     password = forms.CharField(label='Password',
                                widget=forms.PasswordInput(attrs={'placeholder': 'Password'}),
-                               required=True)
+                               required=True, validators=[contains_digits, contains_lowercase, contains_uppercase,
+                                                          does_not_contains_symbols, does_not_contains_whitespace],
+                               min_length=8)
     password_confirm = forms.CharField(label='Password confirmation',
                                        widget=forms.PasswordInput(
                                            attrs={'placeholder': 'Confirm Password'}),
-                                       required=True)
+                                       required=True,
+                                       validators=[contains_digits, contains_lowercase, contains_uppercase,
+                                                   does_not_contains_symbols, does_not_contains_whitespace],
+                                       min_length=8)
 
     class Meta:
         model = CustomAccount
@@ -59,7 +66,7 @@ class AccountAuthenticationForm(forms.ModelForm):
             credential = self.cleaned_data['email']
             existing_user = CustomAccount.objects.filter(email=credential).exists()
             if not existing_user:
-                self.add_error('email', "No Active User Found With This Email")
+                self.add_error('email', "Credentials Are Wrong")
 
 
 class ProfileForm(forms.ModelForm):

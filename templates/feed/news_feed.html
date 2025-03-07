@@ -4,16 +4,17 @@
     <h1 class="main-title">Welcome To Echo Sphere</h1>
     {% for post in news_feed_posts %}
         <section class="main-content">
-            <!-- Feed Section -->
             <div class="feed">
-                <!-- Post Card -->
                 <div class="post-card">
-                    <p class="post-content">{{ post.content }}</p>
-                    {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
-                    {% endif %}
-                    <p><small class="post-info">Posted by {{ post.user.username }}
-                        on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
+                    <a href="{% url 'posts:detail' post.id %}" class="details-link">
+                        <p class="post-content">{{ post.content }}</p>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
+                        {% endif %}
+                        <p><small class="post-info">Posted by <a
+                                href="{% url 'accounts:profile' post.user.username %}">{{ post.user.username }}</a>
+                            on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
+                    </a>
 
                     <!-- Like button and count -->
                     <div class="like-section">
@@ -29,10 +30,32 @@
                                     <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
                                 </form>
                             {% endif %}
-                        {% else %}
-                            <!-- Handle case when the user is not authenticated -->
                         {% endif %}
                         <span class="likes-count">{{ post.likes.count }} Likes</span>
+                        <span class="likes-count">{{ post.comments.count }} Comments</span>
+                    </div>
+
+                    <!-- Display comments -->
+                    <div class="comments-section mt-3">
+                        <h5>Comments</h5>
+                        <div class="comments">
+                            {% for comment in post.comments.all|slice:":3" %}
+                                <div class="border-b border-gray-300 py-2">
+                                    <strong>{{ comment.user.username }}</strong> <span
+                                        class="text-gray-500">{{ comment.timestamp }}</span>
+                                    <p>{{ comment.content }}</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Comment form -->
+                        <form class="comment-form" data-post-id="{{ post.id }}"
+                              action="{% url 'posts:add_comment' post.id %}">
+                            {% csrf_token %}
+                            <textarea name="content" rows="2" class="form-control mb-2"
+                                      placeholder="Write a comment..."></textarea>
+                            <button type="submit" class="btn btn-sm btn-primary">Comment</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -42,31 +65,32 @@
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-    <!-- Your template content -->
-
+    <!-- AJAX for like and comment -->
     <script>
-        $(document).ready(function () {
-            // Add an event listener to all like buttons
-            $(".like-form").on("submit", function (event) {
-                event.preventDefault();  // Prevent the default form submission
-
-                var form = $(this);
-                var url = form.attr("action");
-
-                // Make an AJAX request to the specified URL
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: form.serialize(),  // Serialize the form data
-                    success: function () {
-                        // Reload the current page upon success
-                        location.reload();
-                    },
-                    error: function () {
-                        console.log("Error handling like/unlike");
-                    },
-                });
+        $(".comment-form").on("submit", function (event) {
+            event.preventDefault();
+            var form = $(this);
+            var url = form.attr("action");  // Get the URL from the form action
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: form.serialize(),
+                success: function (response) {
+                    if (response.status === "success") {
+                        var newComment = `
+                    <div class="border-b border-gray-300 py-2">
+                        <strong>${response.user}</strong> <span class="text-gray-500">${response.timestamp}</span>
+                        <p>${response.content}</p>
+                    </div>`;
+                        form.closest('.comments-section').find('.comments').append(newComment);
+                        form.trigger('reset');
+                    }
+                },
+                error: function () {
+                    console.log("Error submitting comment");
+                },
             });
         });
+
     </script>
 {% endblock %}

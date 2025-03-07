@@ -33,25 +33,49 @@
                 <span>{{ user.profile.get_gender_display }}</span>
             </div>
 
-            <!-- Move the redirection button inside the profile card container -->
-            <a href="{% url 'accounts:profile-update' %}" class="redirect-button">Update Profile</a>
+            <!-- Followers and Following Counts -->
+            <div class="detail">
+                <strong>Followers:</strong>
+                <a href="{% url 'accounts:followers' user.username %}"><span>{{ followers_count }}</span></a>
+            </div>
+            <div class="detail">
+                <strong>Following:</strong>
+                <a href="{% url 'accounts:followings' user.username %}"><span>{{ following_count }}</span></a>
+            </div>
+
+            <!-- Follow/Unfollow Button or Update Profile -->
+            {% if user != request.user %}
+                <form method="post">
+                    {% csrf_token %}
+                    {% if is_following %}
+                        <button type="submit" class="redirect-button unfollow-button">Unfollow</button>
+                    {% else %}
+                        <button type="submit" class="redirect-button follow-button">Follow</button>
+                    {% endif %}
+                </form>
+            {% else %}
+                <a href="{% url 'accounts:profile-update' %}" class="redirect-button">Update Profile</a>
+            {% endif %}
         </div>
     </div>
 
-    {% for post in my_posts %}
+    <!-- User's Posts -->
+    {% for post in posts %}
         <section class="main-content">
-            <!-- Feed Section -->
             <div class="feed">
-                <!-- Post Card -->
                 <div class="post-card">
-                    <p class="post-content">{{ post.content }}</p>
-                    {% if post.image %}
-                        <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
-                    {% endif %}
-                    <p><small class="post-info">Posted by {{ post.user.username }}
-                        on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
+                    <a href="{% url 'posts:detail' post.id %}" class="details-link">
+                        <p class="post-content">{{ post.content }}</p>
+                        {% if post.image %}
+                            <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
+                        {% endif %}
+                        <p><small class="post-info">Posted by {{ post.user.username }}
+                            on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
+                    </a>
                 </div>
             </div>
         </section>
+    {% empty %}
+        <p class="no-posts-message">This user hasn't posted anything yet.</p>
     {% endfor %}
 {% endblock %}

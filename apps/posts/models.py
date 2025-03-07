@@ -24,3 +24,15 @@ class Post(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Post ({self.created_at})"
+
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(CustomAccount, on_delete=models.CASCADE)
+    content = models.TextField()
+    edited = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    parent = models.ForeignKey('self', null=True, blank=True, related_name='replies', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.content}'
