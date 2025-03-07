@@ -6,50 +6,55 @@
 
 {% block content %}
     <div class="main-content center-content">
-        <div class="post-details">
-            <div class="post-card-detail">
-                <a href="{% url 'news-feed' %}">
-                    <button class="close-btn">&#10006;</button>
-                </a>
-                {% if user.is_authenticated and user == post.user %}
-                    <div class="dropdown">
-                        <button class="dropbtn">• • •</button>
-                        <div class="dropdown-content">
-                            <form action="{% url 'posts:update' post.id %}" method="GET">
-                                <button type="submit" class="action-btn">Update</button>
-                            </form>
-                            <form action="{% url 'posts:delete' post.id %}" method="GET">
-                                <button type="submit" class="action-btn">Delete</button>
-                            </form>
-                        </div>
+        <div class="post-card-detail">
+            <a href="{% url 'news-feed' %}">
+                <button class="close-btn">&#10006;</button>
+            </a>
+
+            {% if user.is_authenticated and user == post.user %}
+                <div class="dropdown">
+                    <button class="dropbtn">• • •</button>
+                    <div class="dropdown-content">
+                        <form action="{% url 'posts:update' post.id %}" method="GET">
+                            <button type="submit" class="action-btn">Update</button>
+                        </form>
+                        <form action="{% url 'posts:delete' post.id %}" method="GET">
+                            <button type="submit" class="action-btn delete-btn">Delete</button>
+                        </form>
                     </div>
-                {% endif %}
-                <div class="post-info">
-                    <span class="detail">{{ post.created_at }}</span>
                 </div>
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="{{ post.title }}">
-                {% endif %}
-                <div class="post-content">
-                    <p>{{ post.content }}</p>
-                </div>
-                <div class="like-section">
-                    {% if user in post.likes.all %}
-                        <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-primary like-btn">Liked</button>
-                        </form>
-                    {% else %}
-                        <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline-primary like-btn">Like</button>
-                        </form>
-                    {% endif %}
-                    <span class="likes-count">{{ post.likes.count }} Likes</span>
-                </div>
+            {% endif %}
+
+            <h2 class="post-title">{{ post.title }}</h2>
+            <div class="post-info">
+                <span class="detail">{{ post.created_at }}</span>
             </div>
+
+            {% if post.image %}
+                <img style="max-width: 600px" src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
+            {% endif %}
+
+            <div class="post-content">
+                <p>{{ post.content }}</p>
+            </div>
+
+            <div class="like-section">
+                {% if user in post.likes.all %}
+                    <form method="post" action="{% url 'posts:unlike_post' post.id %}" class="like-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary like-btn">❤️ Liked</button>
+                    </form>
+                {% else %}
+                    <form method="post" action="{% url 'posts:like_post' post.id %}" class="like-form">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-primary like-btn">♡ Like</button>
+                    </form>
+                {% endif %}
+                <span class="likes-count">{{ post.likes.count }} Likes</span>
+            </div>
+
             <div class="profile-info">
-                <div class="user-bio">{{ post.user.profile.bio }}</div>
+                <h3>Author Information</h3>
                 <div class="profile-details">
                     <div class="detail">
                         <strong>Author:</strong>
@@ -61,28 +66,31 @@
                     </div>
                 </div>
             </div>
+            <div class="comments">
+                <h3>Comment Section</h3>
+                {% for comment in post.comments.all|slice:":3" %}
+                    <div class="border-b border-gray-300 py-2">
+                        <strong>{{ comment.user.username }}</strong> <span
+                            class="text-gray-500">{{ comment.timestamp }}</span>
+                        <p>{{ comment.content }}</p>
+                    </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 
-    <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-    <!-- Your template content -->
-
     <script>
         $(document).ready(function () {
-            // Add an event listener to all like buttons
             $(".like-form").on("submit", function (event) {
-                event.preventDefault();  // Prevent the default form submission
+                event.preventDefault();
                 var form = $(this);
                 var url = form.attr("action");
-                // Make an AJAX request to the specified URL
                 $.ajax({
                     type: "POST",
                     url: url,
-                    data: form.serialize(),  // Serialize the form data
+                    data: form.serialize(),
                     success: function () {
-                        // Reload the current page upon success
                         location.reload();
                     },
                     error: function () {

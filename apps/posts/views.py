@@ -1,9 +1,12 @@
-from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.views.generic import CreateView
 
-from apps.posts.forms import PostForm, DetailPostForm
-from apps.posts.models import Post
+from apps.posts.forms import PostForm, DetailPostForm, CommentForm
+from apps.posts.models import Post, Comment
 from apps.utils.db_queries import get_all_posts
 
 
@@ -90,3 +93,24 @@ def unlike_post(request, post_id):
         post.save()
         return HttpResponse(status=200)
     return HttpResponse(status=400)
+
+
+class AddCommentView(LoginRequiredMixin, CreateView):
+    model = Comment
+    form_class = CommentForm
+
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(Post, id=self.kwargs['post_id'])
+        form = self.get_form()
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = request.user
+            comment.save()
+            return JsonResponse({
+                'status': 'success',
+                'user': comment.user.username,
+                'content': comment.content,
+                'timestamp': comment.timestamp.strftime('%Y-%m-%d %H:%M'),
+            })
+        return JsonResponse({'status': 'error'})

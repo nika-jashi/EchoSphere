@@ -85,3 +85,11 @@ class AccountProfileEditView(View):
         else:
             print(profile_form.errors)
         return render(request, self.template_name, {'profile_form': profile_form})
+
+
+class AccountOtherProfileView(View):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass
