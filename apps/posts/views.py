@@ -114,3 +114,4 @@ class AddCommentView(LoginRequiredMixin, CreateView):
                 'timestamp': comment.timestamp.strftime('%Y-%m-%d %H:%M'),
             })
         return JsonResponse({'status': 'error'})
+

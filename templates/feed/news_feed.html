@@ -11,7 +11,8 @@
                         {% if post.image %}
                             <img src="{{ post.image.url }}" alt="{{ post.user.username }}'s post image">
                         {% endif %}
-                        <p><small class="post-info">Posted by {{ post.user.username }}
+                        <p><small class="post-info">Posted by <a
+                                href="{% url 'accounts:profile' post.user.username %}">{{ post.user.username }}</a>
                             on {{ post.created_at|date:"F d, Y H:i" }}</small></p>
                     </a>
 

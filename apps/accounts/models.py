@@ -90,3 +90,21 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s Profile"
+
+
+class Follow(models.Model):
+    """ Model to represent a user following another user """
+
+    follower = models.ForeignKey(
+        CustomAccount, related_name='following', on_delete=models.CASCADE
+    )
+    following = models.ForeignKey(
+        CustomAccount, related_name='followers', on_delete=models.CASCADE
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('follower', 'following')
+
+    def __str__(self):
+        return f"{self.follower} follows {self.following}"

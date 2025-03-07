@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="followers-container">
+        <h2 class="followers-title">{{ user.username }}'s Followings</h2>
+        <div class="followers-grid">
+            {% for following in followings %}
+                <div class="follower-card">
+                    {% if following.following.profile.profile_picture %}
+                        <img class="follower-picture" src="{{ following.following.profile.profile_picture.url }}"
+                             alt="{{ user.username }}">
+                    {% endif %}
+                    <p class="follower-name">{{ following.following }}</p>
+                    <a href="{% url 'accounts:profile' following.following %}" class="follower-profile-link">View
+                        Profile</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

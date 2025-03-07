@@ -20,7 +20,7 @@
             <ul class="nav-list">
                 {% if user.is_authenticated %}
                 <li class="nav-item" style="margin-right: 50px"><a href="{% url 'posts:create' %}" class="nav-link">New Post</a></li>
-                <li class="nav-item"><a href="{% url 'accounts:profile' %}" class="nav-link">Profile</a></li>
+                <li class="nav-item"><a href="{% url 'accounts:profile' request.user %}" class="nav-link">Profile</a></li>
                 <li class="nav-item"><a href="{% url 'accounts:logout' %}" class="nav-link">Log Out</a></li>
 
                 {% endif %}

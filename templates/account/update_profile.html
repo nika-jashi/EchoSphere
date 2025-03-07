@@ -70,7 +70,7 @@
                 </div>
             </div>
             <button type="submit">Update</button>
-            <button type="button"><a href="{% url 'accounts:profile' %}" style="text-decoration: none; color: white">Cancel</a></button>
+            <button type="button"><a href="{% url 'accounts:profile' user.username %}" style="text-decoration: none; color: white">Cancel</a></button>
         </form>
     </div>
 {% endblock %}
