@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <div class="form-container">
+        <h2>Email Verification</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="otp">OTP:</label>
+            <input type="text" name="otp" required placeholder="Enter the OTP sent to your email">
+
+            <button type="submit">Verify Email</button>
+
+            <a href="{% url 'accounts:login' %}" class="link">Back to Login</a>
+        </form>
+    </div>
+</body>
+{% endblock content %}

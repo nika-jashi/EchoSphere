@@ -6,7 +6,8 @@ from apps.accounts.views import (AccountRegistrationView,
                                  AccountProfileEditView,
                                  AccountProfileView,
                                  AccountFollowers,
-                                 AccountFollowings)
+                                 AccountFollowings,
+                                 EmailVerificationView)
 
 app_name = "accounts"
 
@@ -20,4 +21,5 @@ urlpatterns = [
          name='followers'),
     path('profile/<str:username>/followings/', l(AccountFollowings.as_view(), redirect_field_name='login'),
          name='followings'),
+    path('verify-email/', EmailVerificationView.as_view(), name='verify_email'),
 ]

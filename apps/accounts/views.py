@@ -1,10 +1,15 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
+from django.core.cache import cache
 
 from apps.accounts.forms import AccountRegistrationForm, AccountAuthenticationForm, ProfileForm
 from apps.accounts.models import Profile, CustomAccount, Follow
 from apps.utils.db_queries import get_users_posts
+from apps.utils.email_sender import SendEmail
+from apps.utils.otp_generator import OTP_generator
+from apps.utils.otp_verify_email_template import email_verify
 
 
 class AccountRegistrationView(View):
@@ -19,8 +24,14 @@ class AccountRegistrationView(View):
         form = AccountRegistrationForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('accounts:login')
+            otp = OTP_generator(password_reset=False)
+            cache.set(otp, form.data.get('email'), timeout=3600)
+            status = SendEmail.send_email(subject="Your Account Has Been Created Get Verified",
+                                          body=email_verify(otp=otp),
+                                          to=[form.data.get("email")])
+            if status is not False:
+                form.save()
+                return redirect('accounts:verify_email')
 
         else:
             return render(request, self.template_name, {'form': form})
@@ -133,3 +144,24 @@ class AccountFollowings(View):
             'followings': followings
         }
         return render(request, self.template_name, context)
+
+
+class EmailVerificationView(View):
+    template_name = 'account/otp_verification.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        otp = request.POST.get('otp')
+        email = request.POST.get('email')
+        cached_email = cache.get(otp)
+
+        if cached_email == email:
+            # Clear the cache after successful verification
+            cache.delete(otp)
+            messages.success(request, 'Email verified successfully. You can now log in.')
+            return redirect('accounts:login')
+        else:
+            messages.error(request, 'Invalid OTP or email. Please try again.')
+            return render(request, self.template_name)

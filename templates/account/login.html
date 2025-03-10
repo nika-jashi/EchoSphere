@@ -1,10 +1,10 @@
 {% extends 'main.html' %}
 {% load static %}
 
-{% block title %}Registration Form - Echo Sphere{% endblock %}
+{% block title %}Login - Echo Sphere{% endblock %}
 {% block content %}
     <div class="form-container">
-        <h2>Registration Form</h2>
+        <h2>Login Form</h2>
         <form method="POST" action={% url 'accounts:login' %}>
             {% csrf_token %}
             <label for="email">Email:</label>
